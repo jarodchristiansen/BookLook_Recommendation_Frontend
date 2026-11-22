@@ -50,7 +50,7 @@ export default function Dashboard() {
         </PageContainer>
       </header>
 
-      <PageContainer as="main" className="py-16 lg:py-20">
+      <PageContainer className="py-16 lg:py-20">
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-primary mb-2">
             Discover books
@@ -61,7 +61,7 @@ export default function Dashboard() {
           </p>
           <Link
             href="/recommendations"
-            className="inline-block bg-accent hover:bg-accent-hover text-white font-medium py-3 px-6 rounded-lg transition-colors"
+            className="inline-block bg-accent-ink hover:bg-teal-800 text-white font-medium py-3 px-6 rounded-lg transition-colors"
           >
             Get book recommendations →
           </Link>
@@ -105,7 +105,7 @@ export default function Dashboard() {
                 onClick={() => setActiveMood(activeMood === id ? null : id)}
                 className={`rounded-full border px-4 py-2 text-small font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                   activeMood === id
-                    ? "border-accent bg-accent text-white"
+                    ? "border-accent-ink bg-accent-ink text-white"
                     : "border-slate-200 bg-secondary text-primary hover:border-accent hover:bg-accent/10"
                 }`}
               >
@@ -139,7 +139,7 @@ export default function Dashboard() {
                     <li key={seed.work_id}>
                       <Link
                         href={`/recommendations?work_id=${encodeURIComponent(seed.work_id)}`}
-                        className="text-accent hover:underline font-medium"
+                        className="text-accent-ink hover:underline font-medium"
                       >
                         {seed.title}
                         {formatRecentSeedAuthorSuffix(seed)}

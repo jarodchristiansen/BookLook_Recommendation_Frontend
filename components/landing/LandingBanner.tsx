@@ -87,7 +87,7 @@ const LandingBanner = () => {
           </span>
           <span className="flex items-center gap-1.5">
             <svg className="w-4 h-4 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-            20M+ books indexed
+            2.1M books in the similarity index
           </span>
           <span className="flex items-center gap-1.5">
             <svg className="w-4 h-4 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -97,7 +97,7 @@ const LandingBanner = () => {
         {/* Privacy reassurance */}
         <p className="text-slate-600 text-xs flex items-center justify-center gap-1.5">
           <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-          No data stored. No tracking. No spam.
+          No account. Nothing about you is stored on our servers.
         </p>
       </div>
 

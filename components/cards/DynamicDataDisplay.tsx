@@ -98,6 +98,7 @@ const DynamicDataDisplay = ({
       recommendations?: unknown[];
       items?: unknown[];
       fallback_used?: boolean;
+      tier?: 1 | 2 | 3;
       detail?: unknown;
       error?: string;
     };
@@ -113,7 +114,8 @@ const DynamicDataDisplay = ({
     const list = Array.isArray(items) ? items : [];
     setData(list);
     setRecommendedItems?.(list);
-    setFallbackUsed?.(result.fallback_used ?? false);
+    // Tier 2 is a real vector search too; only the subject filter is a broadened match.
+    setFallbackUsed?.(result.tier != null ? result.tier === 3 : result.fallback_used ?? false);
     setHasLoaded(true);
   }, [endpoint, seedBook, moodPayload, setRecommendedItems, setFallbackUsed]);
 
@@ -178,7 +180,7 @@ const DynamicDataDisplay = ({
         subtext: (item.author_name as string) ?? (item.subtext as string) ?? "",
         image: coverUrl ?? (item.image as string),
         feature_difference: item.feature_difference as Record<string, number> | undefined,
-        similarity_score: item.similarity_score as number | undefined,
+        similarity_score: (item.similarity ?? item.similarity_score) as number | undefined,
         has_rating: item.has_rating as boolean | undefined,
         avg_rating: item.avg_rating as number | undefined,
         description: (item.description as string)?.trim() || undefined,

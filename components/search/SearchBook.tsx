@@ -68,7 +68,7 @@ const BookEntry = ({ book, handleBookClick, authorDisplay, isSelected }: BookEnt
       </div>
       {/* Info */}
       <div className="p-4">
-        <h4 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${selected ? "text-accent" : "text-primary group-hover:text-accent transition-colors"}`}>
+        <h4 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${selected ? "text-accent-ink" : "text-primary group-hover:text-accent transition-colors"}`}>
           {book.title}
         </h4>
         <p className="text-xs text-slate-500 line-clamp-1">{authorDisplay(book)}</p>
@@ -199,7 +199,7 @@ export default function SearchBook({
         {/* Example query chips */}
         {exampleQueries && exampleQueries.length > 0 && !hasSearched && !loading && (
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="text-xs text-slate-400 font-medium">Try:</span>
+            <span className="text-xs text-slate-500 font-medium">Try:</span>
             {exampleQueries.map((term) => (
               <button
                 key={term}

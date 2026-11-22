@@ -77,7 +77,7 @@ const RecommendationsPage = () => {
 
   const steps = [
     { step: 1, label: "Choose your book", description: "Search and pick one anchor title." },
-    { step: 2, label: "Get matches", description: "Ranked by themes, era, and reception." },
+    { step: 2, label: "Get matches", description: "Ranked by similarity, each with a reason." },
   ] as const;
 
   return (
@@ -102,7 +102,7 @@ const RecommendationsPage = () => {
               Find your next read
             </h1>
             <p className="text-slate-300 leading-relaxed max-w-xl">
-              Start from a book you already love. We surface similar titles with a plain-English reason for every match—no account needed.
+              Start from a book you already love. We find the closest books in a 2.1M-book index and say why each one came up—no account needed.
             </p>
           </header>
 
@@ -123,9 +123,9 @@ const RecommendationsPage = () => {
                       <span
                         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-all duration-300 ${
                           done
-                            ? "bg-accent text-white"
+                            ? "bg-accent-ink text-white"
                             : current
-                              ? "bg-accent text-white shadow-lg shadow-accent/30"
+                              ? "bg-accent-ink text-white shadow-lg shadow-accent/30"
                               : "bg-slate-700 text-slate-400"
                         }`}
                         aria-current={current ? "step" : undefined}
@@ -152,7 +152,7 @@ const RecommendationsPage = () => {
       </div>
 
       {/* Main content area */}
-      <PageContainer as="main" className="py-10 lg:py-14">
+      <PageContainer className="py-10 lg:py-14">
 
         <section className="mb-10">
           <SearchBook
@@ -184,7 +184,7 @@ const RecommendationsPage = () => {
               </h2>
             </div>
             {selectedBooks.length > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-semibold">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent-ink text-xs font-semibold">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                 Ready to match
               </span>
@@ -238,7 +238,7 @@ const RecommendationsPage = () => {
                   </p>
                 )}
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  We&apos;ll match similar books by themes, publication era, and reader reception.
+                  We&apos;ll find the books whose title, author, and subjects sit closest to this one.
                 </p>
               </div>
 
@@ -284,7 +284,7 @@ const RecommendationsPage = () => {
               </svg>
             </Button>
             <p className="mt-3 text-sm text-slate-500">
-              Matched by themes, era, and reception—with a plain-English explanation for every pick.
+              Ranked by embedding similarity, with the reason for every pick.
             </p>
           </div>
         )}
@@ -294,7 +294,7 @@ const RecommendationsPage = () => {
           <section ref={resultsSectionRef} className="scroll-mt-6 border-t border-slate-200/90 pt-12">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div className="max-w-xl">
-                <span className="inline-block text-accent text-xs font-semibold uppercase tracking-widest mb-2">
+                <span className="inline-block text-accent-ink text-xs font-semibold uppercase tracking-widest mb-2">
                   {fallbackUsed ? "Broadened match" : "Results"}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
@@ -302,8 +302,8 @@ const RecommendationsPage = () => {
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   {fallbackUsed
-                    ? "We widened the match to subject overlap so you still get useful suggestions when the catalog is thin."
-                    : "Each card explains why it sits near your anchor—shared subjects, era, or reader reception."}
+                    ? "Similarity search couldn't place this book, so these share one of its subjects. Treat them as a starting point."
+                    : "Ranked by how close each book's embedding is to your anchor, with the reason it came up."}
                 </p>
               </div>
 
@@ -330,7 +330,7 @@ const RecommendationsPage = () => {
                 <button
                   type="button"
                   onClick={handleClearSelection}
-                  className="ml-1 shrink-0 text-xs font-semibold text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+                  className="ml-1 shrink-0 text-xs font-semibold text-accent-ink outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
                 >
                   Change
                 </button>

@@ -9,10 +9,10 @@ import lessPopularIcon from "../../public/images/icons/discoverArtists.svg";
 import customizeIcon from "../../public/images/icons/customize.svg";
 
 const stats = [
-  { value: "20M+", label: "books in catalog" },
-  { value: "Free", label: "always, no tiers" },
-  { value: "Instant", label: "results, no wait" },
-  { value: "100%", label: "transparent picks" },
+  { value: "2.1M", label: "books in the similarity index" },
+  { value: "Free", label: "no account, no tiers" },
+  { value: "10", label: "picks per search" },
+  { value: "Every", label: "pick comes with a reason" },
 ];
 
 const steps = [
@@ -25,13 +25,13 @@ const steps = [
     number: "02",
     title: "Get tailored recommendations",
     description:
-      "We analyze subjects, themes, and metadata to surface titles that genuinely align with your pick.",
+      "We find the books whose embeddings sit closest to your pick's title, author, and subjects.",
   },
   {
     number: "03",
     title: "Understand why each fits",
     description:
-      "Every suggestion comes with a plain-English explanation—similar themes, era, or reception—so you choose with confidence.",
+      "Every suggestion says why it came up—the same author, shared subjects, or how close the match is—so you can judge the fit.",
   },
 ];
 
@@ -63,7 +63,7 @@ const FeatureContainer = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <FeatureSection
               title="See why we recommend"
-              description="Every suggestion comes with a short explanation—similar themes, era, or reception—so you can trust the fit."
+              description="Every suggestion says why it came up—the same author, shared subjects, or how close the match is."
               icon={contentBasedIcon}
             />
             <FeatureSection
@@ -73,12 +73,12 @@ const FeatureContainer = () => {
             />
             <FeatureSection
               title="Similarity you can trust"
-              description="We compare books by subjects, authors, and metadata to surface titles that genuinely align with your pick."
+              description="Each book is an embedding of its title, author, and subjects; your matches are its nearest neighbors."
               icon={cosineSimilarityIcon}
             />
             <FeatureSection
               title="Your reading, your pace"
-              description="No rush. Discover your next read when you're ready; your list is here whenever you return."
+              description="No sign-up and no rush. Start from any book, as often as you like."
               icon={nmfIcon}
             />
             <FeatureSection
@@ -87,8 +87,8 @@ const FeatureContainer = () => {
               icon={lessPopularIcon}
             />
             <FeatureSection
-              title="Your reading list"
-              description="Save books and revisit your discoveries. Your reading list grows with you."
+              title="Recent picks"
+              description="The books you started from are kept in this browser, so you can return to them."
               icon={customizeIcon}
             />
           </div>

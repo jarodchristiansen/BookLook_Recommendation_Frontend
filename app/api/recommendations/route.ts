@@ -1,10 +1,12 @@
 import { createHash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import type { RecommendResponse } from "@/app/types/book";
 import { getRedisClient, redisGetCached, redisSetCache } from "../redis";
 
 const CACHE_TTL_SEC = 3600 * 24 * 30;
 const CACHE_KEY_PREFIX = "rec:zilliz:";
-const CACHE_KEY_VERSION = "v2";
+// v3: responses carry `tier`; v2 entries hold fallbacks from the broken embedding route.
+const CACHE_KEY_VERSION = "v3";
 const OL_WORK_KEY_RE = /OL\d+W/i;
 
 function normalizeWorkKey(workId: string): string {
@@ -39,7 +41,7 @@ async function callRecommendService(body: {
   title: string;
   author_name: string;
   subjects: string[];
-}): Promise<{ recommendations: unknown[]; fallback_used: boolean }> {
+}): Promise<RecommendResponse> {
   const baseUrl = recommendBaseUrl();
   const token = process.env.REC_SERVICE_TOKEN;
   const url = `${baseUrl.replace(/\/$/, "")}/recommend`;
@@ -52,11 +54,7 @@ async function callRecommendService(body: {
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(25000),
   });
-  const data = (await res.json()) as {
-    recommendations?: unknown[];
-    fallback_used?: boolean;
-    detail?: unknown;
-  };
+  const data = (await res.json()) as Partial<RecommendResponse> & { detail?: unknown };
   if (!res.ok) {
     throw new Error(
       typeof data.detail === "string"
@@ -67,7 +65,14 @@ async function callRecommendService(body: {
   return {
     recommendations: data.recommendations ?? [],
     fallback_used: data.fallback_used ?? false,
+    ...(data.tier != null && { tier: data.tier }),
+    ...(data.embedding_unavailable && { embedding_unavailable: true }),
   };
+}
+
+/** Cache real similarity results; a subject-filter fallback should be retried next time. */
+function worthCaching(response: RecommendResponse): boolean {
+  return response.recommendations.length > 0 && response.tier !== 3;
 }
 
 export async function GET(request: NextRequest) {
@@ -97,7 +102,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await callRecommendService(body);
-    if (response.recommendations.length > 0) {
+    if (worthCaching(response)) {
       await redisSetCache(
         redisClient,
         cacheKey,
@@ -155,7 +160,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const response = await callRecommendService(payload);
-    if (response.recommendations.length > 0) {
+    if (worthCaching(response)) {
       await redisSetCache(
         redisClient,
         cacheKey,

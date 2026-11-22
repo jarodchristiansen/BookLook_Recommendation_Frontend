@@ -34,7 +34,7 @@ const Button = ({
       // Variants (design tokens)
       "bg-primary hover:bg-primary/90 text-primary-foreground": variant === "primary",
       "bg-secondary hover:bg-slate-200 text-primary border border-slate-300": variant === "secondary",
-      "bg-accent hover:bg-accent-hover text-white": variant === "accent" || variant === "success",
+      "bg-accent-ink hover:bg-teal-800 text-white": variant === "accent" || variant === "success",
       "bg-primary text-primary-foreground hover:opacity-90": variant === "dark",
       "bg-red-500 hover:bg-red-600 text-white": variant === "danger",
       "bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground": variant === "outline",

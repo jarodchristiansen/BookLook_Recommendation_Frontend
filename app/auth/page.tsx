@@ -23,7 +23,7 @@ const AuthPage = () => {
         </p>
         <Link
           href="/recommendations"
-          className="mt-4 inline-block text-accent hover:text-accent-hover font-medium focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+          className="mt-4 inline-block text-accent-ink hover:text-teal-800 font-medium focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
         >
           Get book recommendations →
         </Link>

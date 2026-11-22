@@ -2,7 +2,8 @@ import { useCallback, useState } from "react";
 import Image from "next/legacy/image";
 import { CardGridProps } from "@/app/types/commonProps";
 import type { RecommendationCardItem } from "@/app/types/book";
-import { FALLBACK_COVER_PATH, openLibraryWorkPageUrl } from "@/app/lib/covers";
+import { openLibraryWorkPageUrl } from "@/app/lib/covers";
+import { splitSubjects } from "@/app/lib/subjects";
 
 const FEATURE_LABELS: Record<string, string> = {
   author_count: "Similar depth of authorship",
@@ -46,7 +47,7 @@ const RecommendCardGrid = ({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3" aria-label={listLabel}>
+    <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3" aria-label={listLabel}>
       {items.map((item: RecommendationCardItem, index) => {
         const itemId = item.id || `${item.name}-${index}`;
         const showFallback = !item?.image || failedCoverIds.has(itemId);
@@ -54,19 +55,21 @@ const RecommendCardGrid = ({
         const selected = isSelected(item);
         const delayStyle = { animationDelay: `${index * 45}ms` } as const;
         const rank = index + 1;
-        const scorePercent = item.similarity_score != null ? Math.round(item.similarity_score * 100) : null;
+        const scorePercent =
+          item.similarity_score != null ? Math.round(Math.max(0, Math.min(1, item.similarity_score)) * 100) : null;
+        const subjects = splitSubjects(item.subjects).slice(0, 4);
 
         const coverBlock = (
           <div className="relative w-full overflow-hidden bg-slate-100" style={{ aspectRatio: "2/3", maxHeight: "260px" }}>
             {showFallback ? (
-              <Image
-                src={FALLBACK_COVER_PATH}
-                alt=""
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0 h-full w-full object-cover"
-                unoptimized
-              />
+              // No cover on Open Library: a plain tile with the title, not a "not available" image.
+              <div
+                className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-br from-slate-700 to-primary p-5 text-left"
+                aria-hidden
+              >
+                <span className="text-lg font-semibold leading-snug text-white line-clamp-4">{item.name}</span>
+                {item.subtext && <span className="text-xs text-slate-300">{item.subtext}</span>}
+              </div>
             ) : (
               <Image
                 src={item.image!}
@@ -80,10 +83,8 @@ const RecommendCardGrid = ({
               />
             )}
             {/* Rank badge */}
-            <span
-              className="absolute top-2.5 left-2.5 w-7 h-7 rounded-full bg-primary/80 backdrop-blur-sm text-white text-xs font-bold flex items-center justify-center shadow-md"
-              aria-label={`Ranked #${rank}`}
-            >
+            <span className="absolute top-2.5 left-2.5 w-7 h-7 rounded-full bg-primary/80 backdrop-blur-sm text-white text-xs font-bold flex items-center justify-center shadow-md">
+              <span className="sr-only">Rank </span>
               {rank}
             </span>
           </div>
@@ -97,54 +98,46 @@ const RecommendCardGrid = ({
               <p className="text-sm text-slate-500 mb-2">{item.subtext}</p>
 
               {/* Subjects */}
-              {item.subjects && (
-                <div className="flex flex-wrap gap-1.5 mb-3" aria-label="Subjects">
-                  {item.subjects
-                    .split(/,\s*/)
-                    .filter(Boolean)
-                    .slice(0, 4)
-                    .map((s) => (
-                      <span
-                        key={s}
-                        className="inline-block rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
-                      >
-                        {s.trim()}
-                      </span>
-                    ))}
-                </div>
+              {subjects.length > 0 && (
+                <ul className="flex flex-wrap gap-1.5 mb-3" aria-label="Subjects">
+                  {subjects.map((s) => (
+                    <li key={s} className="inline-block rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                      {s}
+                    </li>
+                  ))}
+                </ul>
               )}
 
               {/* Rating */}
               {item.has_rating === true && item.avg_rating != null && (
-                <p className="text-sm text-amber-600 mb-2 flex items-center gap-1" aria-label="Average rating">
+                <p className="text-sm text-amber-700 mb-2 flex items-center gap-1">
                   <span aria-hidden>★</span>
+                  <span className="sr-only">Average rating </span>
                   <span className="font-semibold">{item.avg_rating.toFixed(1)}</span>
-                  <span className="text-slate-400 text-xs font-normal">/ 5</span>
+                  <span className="text-slate-500 text-xs font-normal">/ 5</span>
                 </p>
               )}
 
               {/* Explanation */}
               <div className="mt-auto">
-                <p
-                  className="mt-2 text-sm leading-relaxed text-slate-600 bg-slate-50 border-l-2 border-accent/50 pl-3 py-2 pr-2 rounded-r-md"
-                  aria-label="Why this book is similar"
-                >
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 bg-slate-50 border-l-2 border-accent/50 pl-3 py-2 pr-2 rounded-r-md">
+                  <span className="sr-only">Why it&apos;s similar: </span>
                   {item.explanation ?? getWhySimilarText(item.feature_difference)}
                 </p>
 
                 {/* Description */}
                 {item.description && (
-                  <p className="mt-2 line-clamp-2 text-xs text-slate-400 leading-relaxed" aria-label="Book description">
+                  <p className="mt-2 line-clamp-2 text-xs text-slate-500 leading-relaxed">
                     {item.description}
                   </p>
                 )}
 
                 {/* Similarity score */}
                 {scorePercent != null && (
-                  <div className="mt-3" aria-label={`${scorePercent}% match to your pick`}>
+                  <div className="mt-3">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-accent">{scorePercent}% match</span>
-                      <span className="text-xs text-slate-400">to your pick</span>
+                      <span className="text-xs font-semibold text-accent-ink">{scorePercent}% match</span>
+                      <span className="text-xs text-slate-500">to your pick</span>
                     </div>
                     <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
                       <div
@@ -202,7 +195,7 @@ const RecommendCardGrid = ({
           </button>
         );
       })}
-    </div>
+    </section>
   );
 };
 

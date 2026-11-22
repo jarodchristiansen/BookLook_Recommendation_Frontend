@@ -56,4 +56,21 @@ describe("RecommendCardGrid", () => {
     fireEvent.click(bookOneCard!);
     expect(handleItemClick).toHaveBeenCalled();
   });
+
+  it("renders subjects stored as a list literal as clean tags", () => {
+    render(
+      <RecommendCardGrid
+        items={[{ id: "OL9W", name: "Robots", subtext: "A", subjects: '["Vida en otros planetas", "Novela"]' }]}
+        handleItemClick={handleItemClick}
+        selectedItems={[]}
+        type="book-recommendations"
+      />,
+    );
+
+    const tags = screen.getByRole("list", { name: "Subjects" });
+    expect(Array.from(tags.querySelectorAll("li")).map((li) => li.textContent)).toEqual([
+      "Vida en otros planetas",
+      "Novela",
+    ]);
+  });
 });
