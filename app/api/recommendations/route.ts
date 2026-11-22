@@ -70,9 +70,13 @@ async function callRecommendService(body: {
   };
 }
 
-/** Cache real similarity results; a subject-filter fallback should be retried next time. */
+/**
+ * Cache real similarity results; a subject-filter fallback should be retried next time.
+ * An API without `tier` only says `fallback_used`, which also covers tier 2; skip those too.
+ */
 function worthCaching(response: RecommendResponse): boolean {
-  return response.recommendations.length > 0 && response.tier !== 3;
+  if (response.recommendations.length === 0) return false;
+  return response.tier != null ? response.tier !== 3 : !response.fallback_used;
 }
 
 export async function GET(request: NextRequest) {
