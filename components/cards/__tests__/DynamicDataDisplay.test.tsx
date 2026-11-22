@@ -121,4 +121,34 @@ describe("DynamicDataDisplay Component", () => {
 
     expect(defaultProps.onClearSelection).toHaveBeenCalled();
   });
+
+  it.each([
+    [{ tier: 1, fallback_used: false }, false],
+    // Tier 2 is a vector search on a fresh embedding, not a broadened match.
+    [{ tier: 2, fallback_used: true }, false],
+    [{ tier: 3, fallback_used: true }, true],
+    [{ fallback_used: true }, true],
+  ])("reports a broadened match from the tier: %j", async (meta, broadened) => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ recommendations: recommendedBooks, ...meta }),
+    });
+    const setFallbackUsed = jest.fn();
+
+    render(<DynamicDataDisplay {...defaultProps} setFallbackUsed={setFallbackUsed} />);
+
+    await waitFor(() => expect(setFallbackUsed).toHaveBeenCalledWith(broadened));
+  });
+
+  it("shows the API's similarity as the match score", async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () =>
+        Promise.resolve({ recommendations: [{ ...recommendedBooks[0], similarity: 0.874 }], tier: 1 }),
+    });
+
+    render(<DynamicDataDisplay {...defaultProps} />);
+
+    expect(await screen.findByText("87% match")).toBeInTheDocument();
+  });
 });

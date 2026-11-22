@@ -7,7 +7,6 @@ const Footer = () => {
     { id: 1, text: "Home", link: "/" },
     { id: 2, text: "Dashboard", link: "/dashboard" },
     { id: 3, text: "Recommendations", link: "/recommendations" },
-    { id: 6, text: "Sign In / Up", link: "/auth" },
   ];
 
   return (
@@ -19,14 +18,14 @@ const Footer = () => {
           <div className="max-w-xs">
             <p className="font-bold text-lg text-primary-foreground mb-2">Book Rec</p>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Discover reads that genuinely match your taste—with a plain-English explanation for every pick.
+              Discover reads that match your taste, with the reason behind every pick.
             </p>
             {/* Powered by badge */}
             <a
               href="https://openlibrary.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-4 text-xs text-slate-500 hover:text-slate-300 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              className="inline-flex items-center gap-1.5 mt-4 text-xs text-slate-400 hover:text-slate-300 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
               aria-label="Powered by Open Library"
             >
               <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
@@ -38,7 +37,7 @@ const Footer = () => {
 
           {/* Navigation */}
           <nav aria-label="Footer" className="flex flex-col gap-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">Navigation</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Navigation</p>
             {links.map(({ id, text, link }) => (
               <Link
                 href={link}
@@ -52,7 +51,7 @@ const Footer = () => {
 
           {/* Trust note */}
           <div className="max-w-xs">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">Our promise</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">Our promise</p>
             <ul className="space-y-2">
               {[
                 "Free service, no hidden tiers",
@@ -72,7 +71,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom row */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-xs">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-400 text-xs">
           <p>&copy; {currentYear} Book Rec. All rights reserved.</p>
           <p>Discover your next read.</p>
         </div>

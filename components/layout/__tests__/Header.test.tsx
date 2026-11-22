@@ -17,8 +17,8 @@ describe("Header Component", () => {
     expect(dashboardLinks[0]).toHaveAttribute("href", "/dashboard");
     const recLinks = screen.getAllByRole("link", { name: /recommendations/i });
     expect(recLinks[0]).toHaveAttribute("href", "/recommendations");
-    const signInLinks = screen.getAllByRole("link", { name: /sign in\/up/i });
-    expect(signInLinks[0]).toHaveAttribute("href", "/auth");
+    // Sign-in has no providers yet, so the header doesn't offer it.
+    expect(screen.queryByRole("link", { name: /sign in/i })).not.toBeInTheDocument();
   });
 
   it("toggles mobile menu on hamburger click", () => {

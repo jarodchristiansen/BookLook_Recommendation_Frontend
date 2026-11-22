@@ -16,7 +16,6 @@ const Header = () => {
     { id: 2, text: "recommendations", link: "/recommendations" },
     // { id: 4, text: "about", link: "/about" },
     // { id: 5, text: "contact", link: "/contact" },
-    { id: 3, text: "Sign In/Up", link: "/auth" },
   ];
 
   return (

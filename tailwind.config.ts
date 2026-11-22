@@ -46,6 +46,7 @@ const config: Config = {
         accent: {
           DEFAULT: "#14b8a6",   /* teal-500 */
           hover: "#0d9488",     /* teal-600 */
+          ink: "#0f766e",       /* teal-700: accent text on light backgrounds (5.5:1 on white) */
         },
         secondary: "#f1f5f9",   /* slate-100 for secondary UI */
       },

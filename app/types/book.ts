@@ -56,7 +56,11 @@ export type RecommendRequestSeed = {
 /** Response from POST /recommend (and GET /api/recommendations). */
 export type RecommendResponse = {
   recommendations: RecommendedBookType[];
+  /** 1: stored embedding, 2: embedded on the fly, 3: subject filter (no similarity). */
+  tier?: 1 | 2 | 3;
+  /** True for tiers 2 and 3; kept for older clients. */
   fallback_used: boolean;
+  embedding_unavailable?: boolean;
 };
 
 export type SelectedBookArrayType = SearchBookType[] | RecommendedBookType[] | [];
